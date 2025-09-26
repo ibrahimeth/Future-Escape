@@ -45,7 +45,7 @@ public class movomentTile : MonoBehaviour
             FutureEscape.Tiles.GlobalTileSettings.speed = maxSpeed;
         else
         {
-            Debug.Log("Current Speed: " + FutureEscape.Tiles.GlobalTileSettings.speed);
+            //Debug.Log("Current Speed: " + FutureEscape.Tiles.GlobalTileSettings.speed);
         }
     }
 }

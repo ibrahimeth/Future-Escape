@@ -20,7 +20,7 @@ public class TileSpawner : MonoBehaviour
     void Update()
     {
     toleranceBetweenTiles = FutureEscape.Tiles.GlobalTileSettings.speed / 32f;
-        Debug.Log("toleranceBetweenTiles: " + toleranceBetweenTiles);
+        //Debug.Log("toleranceBetweenTiles: " + toleranceBetweenTiles);
         if (tiles.Count > 0)
         {
             GameObject lastTile = tiles[tiles.Count - 1];
@@ -29,7 +29,7 @@ public class TileSpawner : MonoBehaviour
             float lastTileEndX = lastTile.transform.position.x + (tileWidth / 2f);
             if (transform.position.x >= lastTileEndX)
             {
-                Debug.Log("last tile end x: " + lastTileEndX + " spawner x: " + transform.position.x);
+                //Debug.Log("last tile end x: " + lastTileEndX + " spawner x: " + transform.position.x);
                 SpawnTileAtEnd();
             }
         }
