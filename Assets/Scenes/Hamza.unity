@@ -131,9 +131,9 @@ GameObject:
   - component: {fileID: 271066876}
   - component: {fileID: 271066875}
   - component: {fileID: 271066874}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Obstacle
-  m_TagString: Obstacle
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -369,9 +369,9 @@ GameObject:
   - component: {fileID: 423017103}
   - component: {fileID: 423017102}
   - component: {fileID: 423017101}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plane
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -582,5 +582,5 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 423017104}
-  - {fileID: 4277334982059904401}
   - {fileID: 271066877}
+  - {fileID: 4277334982059904401}

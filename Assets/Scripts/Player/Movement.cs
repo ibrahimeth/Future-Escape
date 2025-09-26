@@ -4,47 +4,38 @@ using UnityEngine.InputSystem;
 
 public class Movement : MonoBehaviour
 {
+    [Header("Movement Settings")]
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float moveSpeed = 10;
     [SerializeField] private float jumpStrength = 5;
+    [SerializeField] private float doubleJumpCooldown = 0.1f;
     [SerializeField] private Camera myCamera;
-    [SerializeField] private AudioSource walkingAudio;
-    [SerializeField] private AudioSource jumpAudio;
-    [SerializeField] private float obstacleRaycastDistance = 1f;
-    [SerializeField] private float doubleJumpCooldown = 0.2f;
+
+    [Header("Wall Jump System")]
+    [SerializeField] private Transform wallCheck;
+    [SerializeField] private float isWallSlidingSpeed = 2;
+    private bool isWallTouching;
+    private bool isWallSliding;
+
+    [Header("Animator")]
+    [SerializeField] private Animator animator;
+    private bool isRunning = false;
+    private bool isFalling = false;
+    private bool isJumping = false;
 
     private Rigidbody rb;
     private Vector2 movement;
     private bool canDoubleJump = true;
+    private bool isFacingRight = true;
 
     private bool IsGrounded
     {
         get
         {
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f))
+            if (Physics.OverlapBox(transform.position, new Vector3(0.5f, 1f, 0.5f), Quaternion.identity, LayerMask.GetMask("Ground")).Length > 0)
             {
-                return hit.collider.CompareTag("Ground");
-            }
-            return false;
-        }
-    }
-
-    private bool IsHittingObstacle
-    {
-        get
-        {
-            // Get the movement direction
-            Vector3 rayDirection = new Vector3(movement.x, 0, 0).normalized;
-            
-            // Only check if we're actually moving
-            if (rayDirection.magnitude < 0.1f) return false;
-            
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, rayDirection, out hit, obstacleRaycastDistance))
-            {
-                Debug.DrawRay(transform.position, rayDirection * obstacleRaycastDistance, Color.red);
-                // Check if we hit an obstacle
-                return hit.collider.CompareTag("Obstacle");
+                return true;
             }
             return false;
         }
@@ -53,6 +44,7 @@ public class Movement : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        animator = GetComponentInChildren<Animator>();
         // Cursor.lockState = CursorLockMode.Locked;
         // Cursor.visible = false;
     }
@@ -60,7 +52,16 @@ public class Movement : MonoBehaviour
     void Update()
     {
         Move();
-        doubleJumpCooldownUpdate();
+        UpdateFacingDirection();
+        HandleRunningAnimation();
+        HandleFallingAnimation();
+
+        // Reset falling and jumping states when player lands
+        if (IsGrounded && (isFalling || isJumping))
+        {
+            isFalling = false;
+            isJumping = false;
+        }
     }
 
     public void OnJump(InputValue value)
@@ -85,57 +86,69 @@ public class Movement : MonoBehaviour
     {
         if (value.isPressed && (IsGrounded || canDoubleJump))
         {
-            rb.AddForce(Vector3.up * jumpStrength, ForceMode.Impulse);
-
-            // Reset double jump if grounded or hitting obstacle
-            if ((IsGrounded || IsHittingObstacle) && doubleJumpCooldown <= 0)
-            {
-                canDoubleJump = true;
-                doubleJumpCooldown = 0.2f; // Reset cooldown
-            }
-            else if (!IsGrounded)
+            if (!IsGrounded)
             {
                 canDoubleJump = false;
             }
-
-            // Play jump audio
-            if (jumpAudio != null)
+            else
             {
-                jumpAudio.Play();
+                canDoubleJump = true;
             }
+            rb.AddForce(Vector3.up * jumpStrength, ForceMode.Impulse);
+            isJumping = true; // Set jumping state when jump is initiated
         }
     }
 
-    private void doubleJumpCooldownUpdate()
+    private void HandleRunningAnimation()
     {
-        if (doubleJumpCooldown >= 0)
+        if (animator == null || !IsGrounded) return;
+
+        if (movement.x != 0 && !isRunning)
         {
-            doubleJumpCooldown -= Time.deltaTime;
+            isRunning = true;
+            animator.SetBool("Is Running", true);
+        }
+        else if (movement.x == 0 && isRunning)
+        {
+            isRunning = false;
+            animator.SetBool("Is Running", false);
         }
     }
 
-    private void HandleWalkingAudio(Vector3 moveDirection)
+    private void HandleFallingAnimation()
     {
-        if (walkingAudio == null) return;
+        if (animator == null) return;
 
-        // Check if player is moving
-        bool isMoving = moveDirection.magnitude > 0.1f;
-
-        if (isMoving && IsGrounded)
+        if (!IsGrounded && !isFalling)
         {
-            // Start playing walking audio if not already playing
-            if (!walkingAudio.isPlaying)
-            {
-                walkingAudio.Play();
-            }
-        }
-        else
+            animator.Play("Fall State");
+            isFalling = true;
+        } if(IsGrounded && isFalling)
         {
-            // Stop walking audio when not moving
-            if (walkingAudio.isPlaying)
-            {
-                walkingAudio.Stop();
-            }
+            animator.Play("Idle State");
+            isFalling = false;
         }
     }
+
+    private void UpdateFacingDirection()
+    {
+        if (movement.x > 0 && !isFacingRight)
+        {
+            Flip();
+        }
+        else if (movement.x < 0 && isFacingRight)
+        {
+            Flip();
+        }
+    }
+
+    private void Flip()
+    {
+        isFacingRight = !isFacingRight;
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
+    }
+
+
 }
