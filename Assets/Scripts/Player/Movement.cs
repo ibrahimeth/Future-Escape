@@ -6,10 +6,11 @@ public class Movement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 10;
     [SerializeField] private float jumpStrength = 5;
-    [SerializeField] private float jumbStartLimit = 0.01f;
     [SerializeField] private Camera myCamera;
     [SerializeField] private AudioSource walkingAudio;
     [SerializeField] private AudioSource jumpAudio;
+    [SerializeField] private float obstacleRaycastDistance = 1f;
+    [SerializeField] private float doubleJumpCooldown = 0.2f;
 
     private Rigidbody rb;
     private Vector2 movement;
@@ -28,6 +29,27 @@ public class Movement : MonoBehaviour
         }
     }
 
+    private bool IsHittingObstacle
+    {
+        get
+        {
+            // Get the movement direction
+            Vector3 rayDirection = new Vector3(movement.x, 0, 0).normalized;
+            
+            // Only check if we're actually moving
+            if (rayDirection.magnitude < 0.1f) return false;
+            
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, rayDirection, out hit, obstacleRaycastDistance))
+            {
+                Debug.DrawRay(transform.position, rayDirection * obstacleRaycastDistance, Color.red);
+                // Check if we hit an obstacle
+                return hit.collider.CompareTag("Obstacle");
+            }
+            return false;
+        }
+    }
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -38,6 +60,7 @@ public class Movement : MonoBehaviour
     void Update()
     {
         Move();
+        doubleJumpCooldownUpdate();
     }
 
     public void OnJump(InputValue value)
@@ -63,13 +86,16 @@ public class Movement : MonoBehaviour
         if (value.isPressed && (IsGrounded || canDoubleJump))
         {
             rb.AddForce(Vector3.up * jumpStrength, ForceMode.Impulse);
-            if (!IsGrounded)
-            {
-                canDoubleJump = false;
-            }
-            else
+
+            // Reset double jump if grounded or hitting obstacle
+            if ((IsGrounded || IsHittingObstacle) && doubleJumpCooldown <= 0)
             {
                 canDoubleJump = true;
+                doubleJumpCooldown = 0.2f; // Reset cooldown
+            }
+            else if (!IsGrounded)
+            {
+                canDoubleJump = false;
             }
 
             // Play jump audio
@@ -77,6 +103,14 @@ public class Movement : MonoBehaviour
             {
                 jumpAudio.Play();
             }
+        }
+    }
+
+    private void doubleJumpCooldownUpdate()
+    {
+        if (doubleJumpCooldown >= 0)
+        {
+            doubleJumpCooldown -= Time.deltaTime;
         }
     }
 

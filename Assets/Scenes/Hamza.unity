@@ -132,8 +132,8 @@ GameObject:
   - component: {fileID: 271066875}
   - component: {fileID: 271066874}
   m_Layer: 0
-  m_Name: Cube
-  m_TagString: Untagged
+  m_Name: Obstacle
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -224,8 +224,8 @@ Transform:
   m_GameObject: {fileID: 271066873}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.55443, y: 4.66, z: 2.94451}
-  m_LocalScale: {x: 1, y: 9.95, z: 1}
+  m_LocalPosition: {x: -2.9, y: 4.66, z: 0}
+  m_LocalScale: {x: 3, y: 9.95, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -536,7 +536,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4859299853059361345, guid: f9285144dcfca6b4eb472223c48e930f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.015
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4859299853059361345, guid: f9285144dcfca6b4eb472223c48e930f, type: 3}
       propertyPath: m_LocalPosition.z
