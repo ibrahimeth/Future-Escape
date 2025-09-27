@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
+    path: Assets/Scenes/StartPage.unity
     guid: fc11a65239e6c3340a6af1b781a85c57
   - enabled: 1
     path: Assets/Scenes/Hamza.unity
