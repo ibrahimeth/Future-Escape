@@ -27,6 +27,7 @@ public class Movement : MonoBehaviour
     private bool canDoubleJump = true;
     private bool isFacingRight = true;
     private bool shouldFreezeControls;
+    private HandlePlayerRotation playerRotation;
 
     private bool IsGrounded
     {
@@ -64,6 +65,7 @@ public class Movement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
+        playerRotation = GetComponentInChildren<HandlePlayerRotation>();
     }
 
     void Update()
@@ -77,6 +79,11 @@ public class Movement : MonoBehaviour
     void FixedUpdate()
     {
         if (shouldFreezeControls) return;
+
+        if (playerRotation != null)
+        {
+            playerRotation.UpdateFacingDirection(movement.x);
+        }
 
         Move();
         UpdateFacingDirection();
