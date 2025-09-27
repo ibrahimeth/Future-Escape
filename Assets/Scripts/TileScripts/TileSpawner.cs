@@ -49,11 +49,13 @@ public class TileSpawner : MonoBehaviour
         {
             GameObject newTilePrefab = RandomSelectTilePrefab();
             float newTileWidth = newTilePrefab.GetComponentInChildren<Renderer>().bounds.size.x;
+            Quaternion rotation = Quaternion.Euler(0, -90, 0);
             if (i == 0)
             {
                 // İlk tile, spawner pozisyonuna
-                GameObject tile = Instantiate(newTilePrefab, spawnPos, Quaternion.identity);
+                GameObject tile = Instantiate(newTilePrefab, spawnPos, rotation);
                 SpawnedTiles.Add(tile);
+
             }
             else
             {
@@ -61,12 +63,13 @@ public class TileSpawner : MonoBehaviour
                 float lastTileWidth = lastTile.GetComponentInChildren<Renderer>().bounds.size.x;
                 spawnPos = lastTile.transform.position + new Vector3((lastTileWidth / 2.0f) + (newTileWidth / 2.0f) - toleranceBetweenTiles, 0, 0);
 
-                Quaternion rotation = Quaternion.Euler(0, -90, 0);
                 GameObject tile = Instantiate(newTilePrefab, spawnPos, rotation);
                 SpawnedTiles.Add(tile);
             }
+            transform.position += new Vector3(newTileWidth, 0, 0);
         }
     }
+
     float breakSpaceAll(int index)
     {
         float totalSpace = 0f;
