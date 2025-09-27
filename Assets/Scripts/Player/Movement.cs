@@ -10,12 +10,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private float jumpStrength = 5;
     [SerializeField] private float doubleJumpCooldown = 0.1f;
     [SerializeField] private Camera myCamera;
-
-    [Header("Wall Jump System")]
     [SerializeField] private Transform wallCheck;
-    [SerializeField] private float isWallSlidingSpeed = 2;
-    private bool isWallTouching;
-    private bool isWallSliding;
 
     [Header("Animator")]
     [SerializeField] private Animator animator;
@@ -35,7 +30,7 @@ public class Movement : MonoBehaviour
         {
             if (groundCheck != null)
             {
-                return Physics.OverlapBox(groundCheck.position, new Vector3(0.5f, 0.1f, 0.5f), Quaternion.identity, groundLayer).Length > 0;
+                return Physics.OverlapBox(groundCheck.position, new Vector3(0.3f, 0.1f, 0.5f), Quaternion.identity, groundLayer).Length > 0;
             }
             else
             {
@@ -53,21 +48,20 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-        if(shouldFreezeControls) return;
+        if (shouldFreezeControls) return;
 
         HandleFallingAnimation();
         HandleFallDeath();
-        // Debug ground check - Console'da görmek için
-        Debug.Log($"IsGrounded: {IsGrounded}, Y Velocity: {rb.linearVelocity.y}");
     }
 
     void FixedUpdate()
     {
-        if(shouldFreezeControls) return;
+        if (shouldFreezeControls) return;
 
         Move();
         UpdateFacingDirection();
         HandleRunningAnimation();
+
         // Reset falling and jumping states when player lands
         if (IsGrounded && (isFalling || isJumping))
         {
@@ -78,7 +72,7 @@ public class Movement : MonoBehaviour
 
     public void OnJump(InputValue value)
     {
-        if(shouldFreezeControls) return;
+        if (shouldFreezeControls) return;
 
         Jump(value);
     }
@@ -98,6 +92,7 @@ public class Movement : MonoBehaviour
 
     private void Jump(InputValue value)
     {
+        // Handle regular jump and double jump
         if (value.isPressed && (IsGrounded || canDoubleJump))
         {
             if (!IsGrounded)
@@ -138,7 +133,7 @@ public class Movement : MonoBehaviour
             animator.Play("Fall State");
             isFalling = true;
         }
-        if (IsGrounded && isFalling)
+        if (IsGrounded)
         {
             if (movement.x == 0)
             {
