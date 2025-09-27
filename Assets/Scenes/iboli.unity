@@ -246,6 +246,31 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &355935345 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5966150492799478847, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
+  m_PrefabInstance: {fileID: 577184456060889969}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &355935348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355935345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed80709ef1fd5a64299fe89d38806a8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TileSpawner
+  tilePrefebs:
+  - {fileID: 2804927165422366105, guid: bc0c72470f87d9345a7a515b7e9c106f, type: 3}
+  tilePrefab: {fileID: 4236995519700805629, guid: 0a0cdc4a5b038ac4ba4f58d7e52e3af0, type: 3}
+  tileCount: 2
+  tileSpacing: 0
+  toleranceBetweenTiles: 0.5
+  sawTrapPrefab: {fileID: 8243021506983507677, guid: 288a5b5670a82b247993e59f235fc298, type: 3}
+  HammerTrapPrefab: {fileID: 7353649458325161985, guid: cd057af80ae01de4e93aed19869bb830, type: 3}
 --- !u!1 &427161189
 GameObject:
   m_ObjectHideFlags: 0
@@ -487,6 +512,62 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1103860490420306629, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1103860490420306629, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
+      propertyPath: tilePrefab
+      value: 
+      objectReference: {fileID: 4805866700619091533, guid: 8b59fb3adbd8a9647968b58698a03376, type: 3}
+    - target: {fileID: 1103860490420306629, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
+      propertyPath: sawTrapPrefab
+      value: 
+      objectReference: {fileID: 8243021506983507677, guid: 288a5b5670a82b247993e59f235fc298, type: 3}
+    - target: {fileID: 1103860490420306629, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
+      propertyPath: HammerTrapPrefab
+      value: 
+      objectReference: {fileID: 7353649458325161985, guid: cd057af80ae01de4e93aed19869bb830, type: 3}
+    - target: {fileID: 1103860490420306629, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
+      propertyPath: tilePrefebs.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1103860490420306629, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
+      propertyPath: 'tilePrefebs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 4236995519700805629, guid: 0a0cdc4a5b038ac4ba4f58d7e52e3af0, type: 3}
+    - target: {fileID: 1103860490420306629, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
+      propertyPath: 'tilePrefebs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 4805866700619091533, guid: 8b59fb3adbd8a9647968b58698a03376, type: 3}
+    - target: {fileID: 1103860490420306629, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
+      propertyPath: 'tilePrefebs.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1773923801973543054, guid: 3a8e0488ffb4b5f41843a1bfbfe10ce8, type: 3}
+    - target: {fileID: 1103860490420306629, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
+      propertyPath: 'tilePrefebs.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2804927165422366105, guid: bc0c72470f87d9345a7a515b7e9c106f, type: 3}
+    - target: {fileID: 1103860490420306629, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
+      propertyPath: 'tilePrefebs.Array.data[4]'
+      value: 
+      objectReference: {fileID: 3654038413708174118, guid: 9cffc3f698b748a4abfcd771622364ad, type: 3}
+    - target: {fileID: 1103860490420306629, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
+      propertyPath: 'tilePrefebs.Array.data[5]'
+      value: 
+      objectReference: {fileID: 5760428760733332967, guid: ce2dbefece553c848abd66ff8dd6fee0, type: 3}
+    - target: {fileID: 1103860490420306629, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
+      propertyPath: 'tilePrefebs.Array.data[6]'
+      value: 
+      objectReference: {fileID: 6980423317497967401, guid: 56426009223880f4b88cc6033e8f6997, type: 3}
+    - target: {fileID: 1103860490420306629, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
+      propertyPath: 'tilePrefebs.Array.data[7]'
+      value: 
+      objectReference: {fileID: 5760428760733332967, guid: ce2dbefece553c848abd66ff8dd6fee0, type: 3}
+    - target: {fileID: 1103860490420306629, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
+      propertyPath: 'tilePrefebs.Array.data[8]'
+      value: 
+      objectReference: {fileID: 6980423317497967401, guid: 56426009223880f4b88cc6033e8f6997, type: 3}
     - target: {fileID: 4889227783233684650, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -534,7 +615,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5966150492799478847, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 355935348}
   m_SourcePrefab: {fileID: 100100000, guid: 895b75d39b72ebf4896cb5033cec7785, type: 3}
 --- !u!1001 &7991848345310535385
 PrefabInstance:
@@ -554,11 +638,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6284290237217011013, guid: b0f1c94406c4c8d42a2682f4e4d4ed1f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.453534
+      value: 6.72
       objectReference: {fileID: 0}
     - target: {fileID: 6284290237217011013, guid: b0f1c94406c4c8d42a2682f4e4d4ed1f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.092796
+      value: -13.56
       objectReference: {fileID: 0}
     - target: {fileID: 6284290237217011013, guid: b0f1c94406c4c8d42a2682f4e4d4ed1f, type: 3}
       propertyPath: m_LocalRotation.w
