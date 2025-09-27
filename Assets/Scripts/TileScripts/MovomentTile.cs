@@ -1,4 +1,5 @@
 using System;
+using UnityEditor.MPE;
 using UnityEngine;
 
 public class movomentTile : MonoBehaviour
@@ -7,7 +8,7 @@ public class movomentTile : MonoBehaviour
     [SerializeField] private float speedIncrease = 0.1f; // Zamanla hız artışı
     [SerializeField] private float destroyXOffset = -10f;   // Yok olma pozisyonu (x)
     [SerializeField] private float maxSpeed = 20f;
-
+    [SerializeField] private Rigidbody rb;
     private float tileWidth;
 
     void Start()
@@ -16,6 +17,7 @@ public class movomentTile : MonoBehaviour
         speedIncrease = FutureEscape.Tiles.GlobalTileSettings.speedIncrease;
         Renderer rend = GetComponentInChildren<Renderer>();
         tileWidth = rend.bounds.size.x;
+        rb = GetComponent<Rigidbody>();
     }
     void Update()
     {
@@ -26,7 +28,7 @@ public class movomentTile : MonoBehaviour
 
     private void Move()
     {
-        transform.Translate(Vector3.left * FutureEscape.Tiles.GlobalTileSettings.speed * Time.deltaTime);
+        rb.MovePosition(transform.position + Vector3.left * FutureEscape.Tiles.GlobalTileSettings.speed * Time.deltaTime);
     }
 
     private void CheckDestroy()
