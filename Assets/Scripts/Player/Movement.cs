@@ -10,10 +10,14 @@ public class Movement : MonoBehaviour
     [SerializeField] private float jumpStrength = 5;
     [SerializeField] private float doubleJumpCooldown = 0.1f;
     [SerializeField] private Camera myCamera;
-    [SerializeField] private Transform wallCheck;
 
-    [Header("Animator")]
-    [SerializeField] private Animator animator;
+    [Header("Wall Sliding Settings")]
+    [SerializeField] private Transform wallCheck;
+    [SerializeField] private float wallSlideSpeed = 2f;
+    private bool isWallTouching;
+    private bool isWallSliding;
+
+    private Animator animator;
     private bool isRunning = false;
     private bool isFalling = false;
     private bool isJumping = false;
@@ -23,6 +27,7 @@ public class Movement : MonoBehaviour
     private bool canDoubleJump = true;
     private bool isFacingRight = true;
     private bool shouldFreezeControls;
+    private HandlePlayerRotation playerRotation;
 
     private bool IsGrounded
     {
@@ -40,10 +45,27 @@ public class Movement : MonoBehaviour
         }
     }
 
+    private bool IsWallTouching
+    {
+        get
+        {
+            if (wallCheck != null)
+            {
+                return Physics.OverlapBox(wallCheck.position, new Vector3(0.14f, 0.5f, 0.5f), Quaternion.identity, groundLayer).Length > 0;
+            }
+            else
+            {
+                Debug.LogWarning("WallCheck transform is not assigned.");
+            }
+            return false;
+        }
+    }
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
+        playerRotation = GetComponentInChildren<HandlePlayerRotation>();
     }
 
     void Update()
@@ -58,9 +80,16 @@ public class Movement : MonoBehaviour
     {
         if (shouldFreezeControls) return;
 
+        if (playerRotation != null)
+        {
+            playerRotation.UpdateFacingDirection(movement.x);
+        }
+
         Move();
         UpdateFacingDirection();
         HandleRunningAnimation();
+        CheckWallSliding();
+        HandleWallSliding();
 
         // Reset falling and jumping states when player lands
         if (IsGrounded && (isFalling || isJumping))
@@ -87,12 +116,24 @@ public class Movement : MonoBehaviour
         Vector3 moveDirection = new Vector3(movement.x, 0, 0);
         Vector3 worldMoveDirection = transform.TransformDirection(moveDirection);
 
+        // Duvara temas ettiğinde o yöne hareket etmeyi engelle
+        if (IsWallTouching)
+        {
+            Debug.Log("Wall touching, checking movement direction.");
+            // Eğer oyuncu face ettiği yöne (duvara doğru) hareket etmeye çalışıyorsa, bunu engelle
+            if ((isFacingRight && movement.x > 0) || (!isFacingRight && movement.x < 0))
+            {
+                // Duvara doğru hareket etme, sadece ters yöne gitmesine izin ver
+                return;
+            }
+        }
+
         transform.position += worldMoveDirection * Time.deltaTime * moveSpeed;
     }
 
     private void Jump(InputValue value)
     {
-        // Handle regular jump and double jump
+        // Normal jump ve double jump
         if (value.isPressed && (IsGrounded || canDoubleJump))
         {
             if (!IsGrounded)
@@ -128,7 +169,14 @@ public class Movement : MonoBehaviour
     {
         if (animator == null) return;
 
-        if (!IsGrounded && !isFalling)
+        // Wall sliding animasyonu
+        if (isWallSliding && !isFalling)
+        {
+            animator.Play("Fall State"); // Wall slide için özel animasyon varsa "Wall Slide State" kullanın
+            return;
+        }
+
+        if (!IsGrounded && !isFalling && !isWallSliding)
         {
             animator.Play("Fall State");
             isFalling = true;
@@ -175,5 +223,41 @@ public class Movement : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x *= -1;
         transform.localScale = scale;
+    }
+
+    private void CheckWallSliding()
+    {
+        // Wall sliding kontrolü
+        if (IsWallTouching && !IsGrounded && rb.linearVelocity.y < 0)
+        {
+            // Oyuncu duvara doğru hareket ediyorsa wall slide yap
+            if ((isFacingRight && movement.x > 0) || (!isFacingRight && movement.x < 0))
+            {
+                isWallSliding = true;
+            }
+            else
+            {
+                isWallSliding = false;
+            }
+        }
+        else
+        {
+            isWallSliding = false;
+        }
+    }
+
+    private void HandleWallSliding()
+    {
+        if (isWallSliding)
+        {
+            // Düşme hızını sınırla (wall slide speed)
+            if (rb.linearVelocity.y < -wallSlideSpeed)
+            {
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, -wallSlideSpeed, rb.linearVelocity.z);
+            }
+
+            // Double jump'ı tekrar aktif et
+            canDoubleJump = true;
+        }
     }
 }
